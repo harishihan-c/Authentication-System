@@ -200,7 +200,7 @@ export const sendResetOtp = async (req, res) => {
   }
 
   try {
-    const user = await userModel.findOne(email);
+    const user = await userModel.findOne({ email });
 
     if (!user) {
       return res.json({ success: false, message: "Invalid Email" });
@@ -222,7 +222,7 @@ export const sendResetOtp = async (req, res) => {
       from: process.env.SENDER_EMAIL,
       to: email,
       Subject: "Password Reset OTP",
-      text: `This is your Password Reset OTP ${resetOTP}, Use this to reset your password`,
+      text: `This is your Password Reset OTP ${generateResetOtp}, Use this to reset your password`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -235,7 +235,7 @@ export const sendResetOtp = async (req, res) => {
 
 //Reset Password COntroller
 
-export const reserPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   const { email, newPassword, otp } = req.body;
 
   if (!email || !newPassword || !otp) {
@@ -243,13 +243,13 @@ export const reserPassword = async (req, res) => {
   }
 
   try {
-    const user = await userModel.findOne(email);
+    const user = await userModel.findOne({ email });
 
     if (!user) {
       return res.json({ success: false, message: "Enter Valid Email" });
     }
 
-    if (user.resetOTP !== otp) {
+    if (user.resetOtp !== otp) {
       return res.json({ success: false, message: "Invalid Otp" });
     }
 
@@ -260,7 +260,7 @@ export const reserPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     user.password = hashedPassword;
-    user.resetOTP = "";
+    user.resetOtp = "";
     user.resetOtpExpireAt = 0;
 
     user.save();
