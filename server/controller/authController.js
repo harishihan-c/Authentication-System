@@ -233,3 +233,40 @@ export const sendResetOtp = async (req, res) => {
   }
 };
 
+//Reset Password COntroller
+
+export const reserPassword = async (req, res) => {
+  const { email, newPassword, otp } = req.body;
+
+  if (!email || !newPassword || !otp) {
+    return res.json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const user = await userModel.findOne(email);
+
+    if (!user) {
+      return res.json({ success: false, message: "Enter Valid Email" });
+    }
+
+    if (user.resetOTP !== otp) {
+      return res.json({ success: false, message: "Invalid Otp" });
+    }
+
+    if (user.resetOtpExpireAt < Date.now()) {
+      return res.json({ success: false, message: "Otp Expired" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    user.resetOTP = "";
+    user.resetOtpExpireAt = 0;
+
+    user.save();
+
+    return res.json({ success: false, message: "Password resets" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
