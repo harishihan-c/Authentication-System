@@ -3,6 +3,7 @@ import userModel from "../model/userModel.js";
 import jwt from "jsonwebtoken";
 import transporter from "../config/nodemailer.js";
 
+//Register controller
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -53,6 +54,7 @@ export const register = async (req, res) => {
   }
 };
 
+//Login Controller
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -90,6 +92,7 @@ export const login = async (req, res) => {
   }
 };
 
+//Logout Controller
 export const logout = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -179,6 +182,7 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
+//Is Authenticate Controller
 export const isAuthenticate = (req, res) => {
   try {
     return res.json({ success: true });
@@ -186,3 +190,46 @@ export const isAuthenticate = (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+//Send Reset Otp Controller
+export const sendResetOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.json({ success: false, message: "User not found" });
+  }
+
+  try {
+    const user = await userModel.findOne(email);
+
+    if (!user) {
+      return res.json({ success: false, message: "Invalid Email" });
+    }
+
+    //generate otp
+
+    const generateResetOtp = String(
+      Math.floor(Math.random() * 900000 + 100000)
+    );
+
+    user.resetOtp = generateResetOtp;
+    user.resetOtpExpireAt = Date.now + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    //send email
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      Subject: "Password Reset OTP",
+      text: `This is your Password Reset OTP ${resetOTP}, Use this to reset your password`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({ success: true, message: "OTP sent to your email" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
