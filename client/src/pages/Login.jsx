@@ -1,14 +1,58 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets.js";
+import { AppContext } from "../context/AppContext.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { backendUrl, setIsLoggedin } = useContext(AppContext);
+
   const [state, setState] = useState("Sign Up");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+      axios.defaults.withCredentials = true
+
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+          name,
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          toast.success(data.message);
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          toast.success(data.message);
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(data.message);
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-sky-100 to- bg-cyan-500">
@@ -23,7 +67,7 @@ const Login = () => {
           {state === "Sign Up" ? "Create Account" : "Log In"}
         </h1>
 
-        <form>
+        <form onSubmit={onSubmitHandler}>
           {state === "Sign Up" && (
             <div className="flex gap-4 w-full bg-gray-100 px-8 py-2 rounded-full mb-4">
               <img src={assets.person_icon} alt="" />
