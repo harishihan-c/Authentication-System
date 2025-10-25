@@ -64,7 +64,7 @@ const Login = () => {
         className="w-28 sm:w-32 absolute top-4 left-8 cursor-pointer"
         onClick={() => navigate("/")}
       />
-      <div className="flex flex-col w-full sm:w-96 p-6  rounded-2xl text-center bg-white">
+      <div className="flex flex-col w-md sm:w-96 p-6  rounded-2xl text-center bg-white">
         <h1 className="text-2xl font-medium mb-7 text-gray-900">
           {state === "Sign Up" ? "Create Account" : "Log In"}
         </h1>
@@ -89,7 +89,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               type="text"
               placeholder="Email"
-              className="outline-none bg-transparent placeholder-gray-400 font-light"
+              className="w-full outline-none bg-transparent placeholder-gray-400 font-light"
               required
             />
           </div>
@@ -97,20 +97,21 @@ const Login = () => {
             <img src={assets.lock_icon} alt="" />
             <input
               onChange={(e) => setPassword(e.target.value)}
-              type="text"
+              type="password"
               placeholder="Password"
-              className="outline-none bg-transparent placeholder-gray-400 font-light"
+              className="w-full outline-none bg-transparent placeholder-gray-400 font-light"
               required
             />
           </div>
-          <p
+        
+        {state !== "Sign Up" && <p
             className="text-sm text-gray-500 text-left mb-3 cursor-pointer"
             onClick={() => navigate("/reset-password")}
           >
             Forget Password?
-          </p>
+          </p> }
 
-          <button className="border bg-blue-800 w-full  px-9 py-2 rounded-full mt-3 text-white mb-4">
+          <button className="cursor-pointer border bg-blue-800 w-full  px-9 py-2 rounded-full mt-3 text-white mb-4">
             {state}
           </button>
 
