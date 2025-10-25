@@ -1,6 +1,6 @@
 import { assets } from "../assets/assets.js";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -13,8 +13,10 @@ const NavBar = () => {
 
   const sendVerificationOtp = async () => {
     try {
-      axios.defaults.withCredentials = true
-      const { data } = await axios.post(backendUrl + "/api/auth/send-verify-otp");
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/send-verify-otp"
+      );
       if (data.success) {
         toast.success(data.message);
         navigate("/email-verify");
@@ -49,7 +51,7 @@ const NavBar = () => {
           {userData.name[0].toUpperCase()}
           <div className="absolute w-30 hidden group-hover:block text-black top-0 right-0 z-10 rounded pt-13">
             <ul className="list-none p-2 bg-gray-100 text-sm">
-              {!userData.isAccountverified && (
+              {!userData.isAccountVerified && (
                 <li
                   className="hover:bg-gray-200 px-2 py-1 "
                   onClick={sendVerificationOtp}
@@ -57,10 +59,7 @@ const NavBar = () => {
                   Verify Email
                 </li>
               )}
-              <li
-                className="hover:bg-gray-200 px-2 py-1"
-                onClick={() => logOut}
-              >
+              <li className="hover:bg-gray-200 px-2 py-1" onClick={logOut}>
                 Logout
               </li>
             </ul>
