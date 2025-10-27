@@ -1,9 +1,12 @@
 # 🔐 MERN Authentication System
+![App Screenshot](client/public/App%20ScreenShot.png)
 
-A complete **Authentication System** built using the **MERN Stack** — MongoDB, Express.js, React.js, and Node.js.  
-This project includes secure user registration, login, logout, OTP verification for password reset, and protected routes.
 
-![App Screenshot](client/public/App Screenshot.png)
+  A complete Authentication System built using the MERN Stack - MongoDB, Express.js, React.js, and Node.js.  
+This project includes secure user registration, login, logout, OTP verification for password reset, and protected routes. 
+
+
+
 
 ---
 
