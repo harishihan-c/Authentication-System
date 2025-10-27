@@ -56,11 +56,29 @@ const ResetPassword = () => {
     }
   };
 
+  const onSubmitOtp = async (e) => {
+    e.preventDefault();
+    const otpArray = inputRef.current.map((e) => e.value);
+    setOtp(otpArray.join(""));
+    console.log(otp);
+    setIsOtpSubmited(true);
+  };
+
+  const onSubmitPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/reset-password",
+        { email, otp, newPassword }
+      );
+      data.success ? toast.success(data.message) : toast.error(data.message);
+      data.success && navigate("/login");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
-    <div
-      onSubmit={onSubmitEmail}
-      className="flex justify-center items-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-sky-100 to- bg-cyan-500"
-    >
+    <div className="flex justify-center items-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-sky-100 to- bg-cyan-500">
       <img
         src={assets.logo}
         alt=""
@@ -71,7 +89,10 @@ const ResetPassword = () => {
         }}
       />
       {!isEmailSent && (
-        <form className="w-96  bg-white px-4 py-4 text-center rounded flex flex-col items-center">
+        <form
+          onSubmit={onSubmitEmail}
+          className="w-96  bg-white px-4 py-4 text-center rounded flex flex-col items-center"
+        >
           <h1 className="font-medium text-xl mb-2"> Reset Password</h1>
           <p className="text-sm mb-6">Enter your Email to Reset password</p>
           <div className="flex gap-4 w-full bg-gray-100 px-8 py-2 rounded-full mb-4">
@@ -96,7 +117,7 @@ const ResetPassword = () => {
 
       {!isOtpSubmited && isEmailSent && (
         <form
-          onPaste={handlePaste}
+          onSubmit={onSubmitOtp}
           className="w-96  bg-white px-4 py-4 text-center rounded"
         >
           <h1 className="font-medium text-xl mb-2">
@@ -106,7 +127,10 @@ const ResetPassword = () => {
           <p className="text-sm mb-6">
             Enter the 6-Digit code sent to your Email
           </p>
-          <div className="flex gap-1 justify-between mb-6">
+          <div
+            onPaste={handlePaste}
+            className="flex gap-1 justify-between mb-6"
+          >
             {Array(6)
               .fill(0)
               .map((_, index) => (
@@ -130,7 +154,10 @@ const ResetPassword = () => {
       {/* new Password */}
 
       {isOtpSubmited && isEmailSent && (
-        <form className="w-96  bg-white px-4 py-4 text-center rounded flex flex-col items-center">
+        <form
+          onSubmit={onSubmitPassword}
+          className="w-96  bg-white px-4 py-4 text-center rounded flex flex-col items-center"
+        >
           <h1 className="font-medium text-xl mb-2"> New Password</h1>
           <p className="text-sm mb-6">Enter your New Password</p>
           <div className="flex gap-4 w-full bg-gray-100 px-8 py-2 rounded-full mb-4">
