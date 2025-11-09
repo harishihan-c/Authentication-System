@@ -10,14 +10,14 @@ import userRouter from "./routes/userRouter.js";
 const app = express();
 const port = process.env.PORT || 3000;
 
-const allowedOrigins = ['https://authentication-system-frontend-topaz.vercel.app']
+// const allowedOrigins = ['https://authentication-system-frontend-topaz.vercel.app']
 
 ConnectDB();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://authentication-system-frontend-topaz.vercel.app",
+  origin: "https://authentication-system-frontend-topaz.vercel.app/",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
