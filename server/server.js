@@ -15,8 +15,19 @@ const allowedOrigins = ['https://authentication-system-frontend-topaz.vercel.app
 ConnectDB();
 
 app.use(express.json());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
+app.use(cors({
+  origin: "https://authentication-system-frontend-topaz.vercel.app",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+// Handle preflight requests
+app.options("*", cors({
+  origin: "https://authentication-system-frontend-topaz.vercel.app",
+  credentials: true,
+}));
 
 //Api EndPoints
 app.get("/", (req, res) => {
