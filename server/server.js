@@ -25,7 +25,7 @@ app.use(cors({
 
 // Handle preflight requests
 app.options("*", cors({
-  origin: "https://authentication-system-frontend-topaz.vercel.app",
+  origin: "https://authentication-system-frontend-topaz.vercel.app/",
   credentials: true,
 }));
 
