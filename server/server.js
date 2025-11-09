@@ -23,11 +23,11 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-// Handle preflight requests
-app.options("*", cors({
-  origin: "https://authentication-system-frontend-topaz.vercel.app/",
-  credentials: true,
-}));
+// // Handle preflight requests
+// app.options("*", cors({
+//   origin: "https://authentication-system-frontend-topaz.vercel.app/",
+//   credentials: true,
+// }));
 
 //Api EndPoints
 app.get("/", (req, res) => {
