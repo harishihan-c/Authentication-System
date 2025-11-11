@@ -1,6 +1,6 @@
 # 🔐 MERN Authentication System
 [Live Link - https://authentication-system-frontend-topaz.vercel.app/ ]
-</br>
+<br/>
 ![App Screenshot](client/public/App%20ScreenShot.png)
 
 
